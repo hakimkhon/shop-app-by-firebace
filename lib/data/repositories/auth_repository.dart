@@ -26,6 +26,28 @@ class AuthRepository {
     }
     return networkResponse;
   }
+  
+  Future<NetworkResponse> loginUserByEmail({
+    required String email,
+    required String password,
+  }) async {
+    NetworkResponse networkResponse = NetworkResponse();
+    try {
+      UserCredential userCredential =
+          await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      if (userCredential.user != null) {}
+    } on FirebaseAuthException catch (e) {
+      networkResponse.errorText = e.friendlyMessage;
+    } on FirebaseException catch (e) {
+      networkResponse.errorText = e.friendlyMessage;
+    } catch (e) {
+      networkResponse.errorText = "Nomalum xatolik";
+    }
+    return networkResponse;
+  }
 
   //  Future<NetworkResponse> saveUser(String email) async {
   //   NetworkResponse networkResponse = NetworkResponse();

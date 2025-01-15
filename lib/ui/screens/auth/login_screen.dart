@@ -83,12 +83,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         horizontal: 50, vertical: 10),
                     backgroundColor: Colors.blue),
                 onPressed: () {
-                  // FocusScope.of(context).unfocus();
-                  // context.read<AuthCubit>().loginUser(
-                  //       email: _controllerEmail.text,
-                  //       password: _controllerPassword.text,
-                  //     );
-                  // debugPrint("Login on Pressed:*******************************");
+                  FocusScope.of(context).unfocus();
+                  context.read<AuthCubit>().loginUserByEmail(
+                        email: _controllerEmail.text,
+                        password: _controllerPassword.text,
+                      );
+                  debugPrint("Login on Pressed:*******************************");
                 },
                 child: context.watch<AuthCubit>().state.formsStatus ==
                         FormsStatus.loading

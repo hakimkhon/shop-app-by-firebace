@@ -8,6 +8,7 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit(AuthRepository read) : super(AuthState.initial());
 
   final AuthRepository _authRepository = AuthRepository();
+  
   Future<void> registerUserByEmail({
     required String email,
     required String password,
@@ -15,6 +16,24 @@ class AuthCubit extends Cubit<AuthState> {
     emit(state.copyWith(formsStatus: FormsStatus.loading));
 
     NetworkResponse networkResponse = await _authRepository.registerUserByEmail(
+      email: email,
+      password: password,
+    );
+
+    if (networkResponse.errorText.isEmpty) {
+      emit(state.copyWith(formsStatus: FormsStatus.authenticated));
+    } else {
+      setStateToError(networkResponse.errorText);
+    }
+  }
+  
+  Future<void> loginUserByEmail({
+    required String email,
+    required String password,
+  }) async {
+    emit(state.copyWith(formsStatus: FormsStatus.loading));
+
+    NetworkResponse networkResponse = await _authRepository.loginUserByEmail(
       email: email,
       password: password,
     );

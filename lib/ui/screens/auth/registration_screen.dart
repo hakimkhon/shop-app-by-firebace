@@ -112,13 +112,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             );
           },
           listener: (BuildContext context, AuthState state) {
-            if (state.formsStatus == FormsStatus.unAuthenticated) {
+            if (state.formsStatus == FormsStatus.authenticated) {
               NavigationService.instance.navigateMyScreenAndRemoveUntil(
                 routeName: AppRoutesNames.home,
               );
             } else if (state.formsStatus == FormsStatus.error) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
+                  backgroundColor: Colors.red,
                   content: Text(
                     state.errorText,
                     style: TextStyle(
