@@ -39,6 +39,7 @@ dependencies:
   shared_preferences: ^2.3.5
   flutter_bloc: ^9.0.0
   flutter_screenutil: ^5.9.3
+  cloud_firestore: ^5.6.1
 
 dev_dependencies:
   flutter_test:
