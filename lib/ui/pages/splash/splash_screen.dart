@@ -15,9 +15,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(Duration(seconds: 1), () {
-      String userEmail = StorageRepository.getString(key: FixedNames.userEmail);
+      String adminId = StorageRepository.getString(key: FixedNames.adminId);
 
-      if (userEmail.isEmpty) {
+      if (adminId.isEmpty) {
         NavigationService.instance.navigateMyScreenReplacement(
           routeName: AppRoutesNames.regist,
         );

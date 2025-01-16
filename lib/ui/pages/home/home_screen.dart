@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ))
           ],
         ),
-        body: BlocBuilder<UserCubit, UserState>(
+        body: BlocConsumer<UserCubit, UserState>(
           builder: (BuildContext context, UserState state) {
             if (state.formsStatus == FormsStatus.loading) {
               return const Center(child: CircularProgressIndicator.adaptive());
@@ -52,14 +52,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
             return Center(
               child: Text(
-                state.userModel.email,
+                state.userModel.phoneNumber,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
                 ),
               ),
             );
-          },
+          }, listener: (BuildContext context,  state) { 
+
+           },
         ));
   }
 

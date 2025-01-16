@@ -4,32 +4,34 @@ import 'package:shop/data/models/network_response.dart';
 import 'package:shop/data/models/user_model.dart';
 import 'package:shop/data/utils/extension/app_extension.dart';
 import 'package:shop/ui/core/constant/fixed_names.dart';
+import 'dart:developer';
 
 class UserRepository {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   Future<NetworkResponse> getUser() async {
     NetworkResponse networkResponse = NetworkResponse();
-    String userEmail = StorageRepository.getString(key: FixedNames.userEmail);
+    String adminId = StorageRepository.getString(key: FixedNames.adminId);
 
     try {
       var result = await _firebaseFirestore
-          .collection(FixedNames.users)
-          .where(FixedNames.userEmail, isEqualTo: userEmail)
+          .collection(FixedNames.admins)
+          .doc(adminId)
           .get();
 
-      List<UserModel> userModels =
-          result.docs.map((value) => UserModel.fromJson(value.data())).toList();
-
-      if (userModels.isNotEmpty) {
-        networkResponse.data = userModels.first;
+      if (result.data() != null) {
+        networkResponse.data = UserModel.fromJson(result.data()!);
       } else {
-        networkResponse.errorText = "not_found";
+        networkResponse.errorText = FixedNames.notFound;
       }
     } on FirebaseException catch (e) {
+      log(e.friendlyMessage);
+
       networkResponse.errorText = e.friendlyMessage;
     } catch (e) {
-      networkResponse.errorText = "Noma'lum xatolik: catch (e) ";
+      log("Nomalum xatolik catch $e");
+
+      networkResponse.errorText = "Nomalum xatolik catch $e";
     }
 
     return networkResponse;

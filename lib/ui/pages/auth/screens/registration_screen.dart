@@ -1,6 +1,4 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shop/cubit/auth/auth_cubit.dart';
@@ -17,7 +15,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerPhoneNumber = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -31,7 +29,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 children: [
                   Text(
                     textAlign: TextAlign.center,
-                    "Registration by Phone number",
+                    "Sign in by Phone number",
                     style: TextStyle(
                       fontSize: 24.sp,
                       color: Colors.blue,
@@ -42,7 +40,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   TextFormField(
                     decoration:
                         const InputDecoration(hintText: "Inter phone number"),
-                    controller: _controllerEmail,
+                    controller: _controllerPhoneNumber,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
                   ),
                   20.verticalSpace,
@@ -52,37 +51,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     controller: _controllerPassword,
                     keyboardType: TextInputType.visiblePassword,
                   ),
-                  10.verticalSpace,
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        text: "Already have an account?",
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: Colors.grey,
-                        ),
-                        children: [
-                          const TextSpan(text: " "),
-                          TextSpan(
-                            text: "Login",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16.sp,
-                              decoration: TextDecoration.underline,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                NavigationService.instance.navigateMyScreen(
-                                  routeName: AppRoutesNames.login,
-                                );
-                              },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  
                   30.verticalSpace,
                   TextButton(
                     style: TextButton.styleFrom(
@@ -91,8 +60,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         backgroundColor: Colors.blue),
                     onPressed: () {
                       FocusScope.of(context).unfocus();
-                      context.read<AuthCubit>().registerUserByEmail(
-                            email: _controllerEmail.text,
+                      context.read<AuthCubit>().loginAdminByPhoneNumber(
+                            phoneNumber: _controllerPhoneNumber.text,
                             password: _controllerPassword.text,
                           );
                       debugPrint(
@@ -105,7 +74,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 AlwaysStoppedAnimation<Color>(Colors.white),
                           )
                         : const Text(
-                            "Create account",
+                            "Login",
                             style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
                   ),
@@ -140,7 +109,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   void dispose() {
-    _controllerEmail.dispose();
+    _controllerPhoneNumber.dispose();
     _controllerPassword.dispose();
     super.dispose();
   }

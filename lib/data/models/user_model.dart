@@ -1,47 +1,49 @@
+import 'package:shop/ui/core/constant/fixed_names.dart';
+
 class UserModel {
   final String docId;
-  final String email;
-  final String fullName;
+  final String phoneNumber;
+  final String password;
 
   UserModel({
-    required this.fullName,
     required this.docId,
-    required this.email,
+    required this.password,
+    required this.phoneNumber,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      fullName: json["full_name"] as String? ?? "",
-      docId: json["doc_id"] as String? ?? "",
-      email: json["user_email"] as String? ?? "",
+      password: json[FixedNames.password] as String? ?? "",
+      docId: json[FixedNames.docID] as String? ?? "",
+      phoneNumber: json[FixedNames.phoneNumber] as String? ?? "",
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "full_name": fullName,
-      "doc_id": docId,
-      "user_email": email,
+      FixedNames.password: password,
+      FixedNames.docID: docId,
+      FixedNames.phoneNumber: phoneNumber,
     };
   }
 
   factory UserModel.initial() {
     return UserModel(
-      fullName: "",
+      password: "",
       docId: "",
-      email: "",
+      phoneNumber: "",
     );
   }
 
   UserModel copyWith({
     String? docId,
-    String? email,
-    String? fullName,
+    String? phoneNumber,
+    String? password,
   }) {
     return UserModel(
-      fullName: fullName ?? this.fullName,
+      password: password ?? this.password,
       docId: docId ?? this.docId,
-      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
     );
   }
 }
