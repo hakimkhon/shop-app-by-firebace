@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             children: [
               Text(
-                "Login",
+                "Sign in to Notes",
                 style: TextStyle(
                   fontSize: 24.sp,
                   color: Colors.blue,
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    text: "Don't have an account?",
+                    text: "New to Notes? ",
                     style: TextStyle(
                       fontSize: 16.sp,
                       color: Colors.grey,
