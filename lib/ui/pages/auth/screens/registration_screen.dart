@@ -30,7 +30,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               child: Column(
                 children: [
                   Text(
-                    "Registration",
+                    textAlign: TextAlign.center,
+                    "Registration by Phone number",
                     style: TextStyle(
                       fontSize: 24.sp,
                       color: Colors.blue,
@@ -39,7 +40,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   20.verticalSpace,
                   TextFormField(
-                    decoration: const InputDecoration(hintText: "Inter email"),
+                    decoration:
+                        const InputDecoration(hintText: "Inter phone number"),
                     controller: _controllerEmail,
                     keyboardType: TextInputType.emailAddress,
                   ),
