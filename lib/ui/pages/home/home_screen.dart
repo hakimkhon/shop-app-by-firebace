@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop/cubit/user/user_cubit.dart';
-import 'package:shop/cubit/user/user_state.dart';
-import 'package:shop/data/enums/forms_status.dart';
 import 'package:shop/data/routes/app_routes.dart';
 import 'package:shop/data/routes/navigation_service.dart';
+import 'package:shop/ui/pages/home/widgets/category_item.dart';
+import 'package:shop/ui/pages/home/widgets/product_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,40 +29,51 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          title: Text("Home Screen"),
-          actions: [
-            IconButton(
-                onPressed: () async {
-                  await logout();
-                },
-                icon: Icon(
-                  Icons.exit_to_app,
-                  color: Colors.red,
-                ))
-          ],
-        ),
-        body: BlocConsumer<UserCubit, UserState>(
-          builder: (BuildContext context, UserState state) {
-            if (state.formsStatus == FormsStatus.loading) {
-              return const Center(child: CircularProgressIndicator.adaptive());
-            }
-
-            return Center(
-              child: Text(
-                state.userModel.phoneNumber,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
+      appBar: AppBar(
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        title: Text("Home Screen"),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await logout();
+              },
+              icon: Icon(
+                Icons.exit_to_app,
+                color: Colors.red,
+              ))
+        ],
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(
+                  5,
+                  (index) {
+                    return CategoryItem(
+                      onTap: () {},
+                    );
+                  },
                 ),
               ),
-            );
-          }, listener: (BuildContext context,  state) { 
-
-           },
-        ));
+            ),
+          ),
+           SliverGrid.builder(
+            itemCount: 10,
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            itemBuilder: (context, index) {
+              return ProductItem(
+                onTap: () {},
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> logout() async {
