@@ -29,7 +29,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 children: [
                   Text(
                     textAlign: TextAlign.center,
-                    "Sign in by Phone number",
+                    "Sign in by Phone number ",
                     style: TextStyle(
                       fontSize: 24.sp,
                       color: Colors.blue,
