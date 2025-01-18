@@ -5,5 +5,8 @@ class FixedNames {
   static const phoneNumber = "phone_number";
   static const password = "password";
   static const notFound = "not_found";
+  static const categoryId = "category_id";
+  static const imageUrl = "image_url";
+  static const title = "title";
 
 }

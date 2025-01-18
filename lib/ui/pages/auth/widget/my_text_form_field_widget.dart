@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 
 class MyTextFormFieldWidget extends StatelessWidget {
   final String hintText;
-  final TextEditingController controller;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final Function? onChanged;
+
   const MyTextFormFieldWidget({
     super.key,
     required this.hintText,
-    required this.controller,
+    this.controller,
+    this.keyboardType,
+    this.onChanged,
   });
 
   @override
@@ -14,7 +19,10 @@ class MyTextFormFieldWidget extends StatelessWidget {
     return TextFormField(
       decoration: InputDecoration(hintText: hintText),
       controller: controller,
-      // keyboardType: TextInputType.emailAddress,
+      keyboardType: keyboardType,
+      onChanged: (value) {
+        onChanged!();
+      },
     );
   }
 }

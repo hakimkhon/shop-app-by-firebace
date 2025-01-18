@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ProductItem extends StatelessWidget {
+class CategoryItem extends StatelessWidget {
   final VoidCallback onTap;
-  
-  const ProductItem({
+
+  const CategoryItem({
     super.key,
     required this.onTap,
   });
@@ -14,7 +14,7 @@ class ProductItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 3.w),
+        padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 3.w),
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: Colors.amber[800],

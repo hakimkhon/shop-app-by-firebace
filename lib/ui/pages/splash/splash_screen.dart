@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shop/data/local/storage_repository.dart';
 import 'package:shop/data/routes/app_routes.dart';
 import 'package:shop/data/routes/navigation_service.dart';
+import 'package:shop/data/utils/app/app_siza.dart';
 import 'package:shop/ui/core/constant/fixed_names.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,6 +33,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Center(
         child: Text(
