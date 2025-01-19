@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop/cubit/home/home_cubit.dart';
+import 'package:shop/cubit/home/home_state.dart';
 import 'package:shop/cubit/user/user_cubit.dart';
+import 'package:shop/data/enums/forms_status.dart';
 import 'package:shop/data/routes/app_routes.dart';
 import 'package:shop/data/routes/navigation_service.dart';
 import 'package:shop/ui/pages/category/widget/category_item.dart';
 import 'package:shop/ui/pages/widgets/my_app_bar_widget.dart';
-import 'package:shop/ui/pages/category/widget/product_item.dart';
+import 'package:shop/ui/pages/product/widget/product_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
       () {
         // ignore: use_build_context_synchronously
         context.read<UserCubit>().fetchUser();
+        // ignore: use_build_context_synchronously
+        context.read<HomeCubit>().getCategories();
       },
     );
     super.initState();
@@ -31,22 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   automaticallyImplyLeading: false,
-      //   title: Text("Shop App"),
-
-      //   actions: [
-      //     IconButton(
-      //       onPressed: () async {
-      //         await logout();
-      //       },
-      //       icon: Icon(
-      //         Icons.logout,
-      //         color: Colors.red,
-      //       ),
-      //     ),
-      //   ],
-      // ),
       appBar: MyAppBar(
         title: "Shop App",
         actions: [
@@ -77,40 +66,58 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(
-                  5,
-                  (index) {
-                    return CategoryItem(
-                      onTap: () {},
+      body: BlocBuilder<HomeCubit, HomeState>(
+        builder: (BuildContext context, state) {
+          if (state.formsStatus == FormsStatus.loading) {
+            Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
+          }
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(
+                      state.categories.length,
+                      (index) {
+                        return CategoryItem(
+                          onTap: () {},
+                          onLongPress: () {},
+                          categoryModel: state.categories[index],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                sliver: SliverGrid.builder(
+                  itemCount: state.products.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemBuilder: (context, index) {
+                    return ProductItem(
+                      onTap: () {
+                        NavigationService.instance.navigateMyScreen(
+                          routeName: AppRoutesNames.productDetail,
+                          arguments: state.products[index],
+                        );
+                      },
+                      onLongPress: () {},
+                      productModel: state.products[index],
                     );
                   },
                 ),
               ),
-            ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w),
-            sliver: SliverGrid.builder(
-              itemCount: 10,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemBuilder: (context, index) {
-                return ProductItem(
-                  onTap: () {},
-                );
-              },
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }

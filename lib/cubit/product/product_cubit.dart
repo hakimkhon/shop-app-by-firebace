@@ -1,21 +1,21 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop/cubit/category/category_state.dart';
+import 'package:shop/cubit/product/product_state.dart';
 import 'package:shop/data/enums/forms_status.dart';
-import 'package:shop/data/models/category_model.dart';
 import 'package:shop/data/models/network_response.dart';
-import 'package:shop/data/repositories/category_repository.dart';
+import 'package:shop/data/models/product_model.dart';
+import 'package:shop/data/repositories/product_repository.dart';
 import 'package:shop/ui/core/constant/fixed_names.dart';
 
-class CategoryCubit extends Cubit<CategoryState> {
-  CategoryCubit(this._categoryRepository) : super(CategoryState.initial());
+class ProductCubit extends Cubit<ProductState> {
+  ProductCubit(this._productRepository) : super(ProductState.initial());
 
-  final CategoryRepository _categoryRepository;
+  final ProductRepository _productRepository;
 
-  Future<void> addCategory({required CategoryModel categoryModel}) async {
+  Future<void> addProduct({required ProductModel productModel}) async {
     emit(state.copyWith(formsStatus: FormsStatus.loading));
 
     NetworkResponse networkResponse =
-        await _categoryRepository.addCategory(categoryModel: categoryModel);
+        await _productRepository.addProduct(productModel: productModel);
 
     if (networkResponse.errorText.isEmpty) {
       emit(
@@ -29,11 +29,11 @@ class CategoryCubit extends Cubit<CategoryState> {
     }
   }
 
-  Future<void> updateCategory({required CategoryModel categoryModel}) async {
+  Future<void> updateProduct({required ProductModel productModel}) async {
     emit(state.copyWith(formsStatus: FormsStatus.loading));
 
     NetworkResponse networkResponse =
-        await _categoryRepository.updateCategory(categoryModel: categoryModel);
+        await _productRepository.updateProduct(productModel: productModel);
 
     if (networkResponse.errorText.isEmpty) {
       emit(state.copyWith(formsStatus: FormsStatus.success));

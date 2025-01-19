@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shop/cubit/auth/auth_cubit.dart';
+import 'package:shop/cubit/category/category_cubit.dart';
+import 'package:shop/cubit/home/home_cubit.dart';
+import 'package:shop/cubit/product/product_cubit.dart';
 import 'package:shop/cubit/user/user_cubit.dart';
 import 'package:shop/data/local/storage_repository.dart';
 import 'package:shop/data/repositories/auth_repository.dart';
+import 'package:shop/data/repositories/category_repository.dart';
+import 'package:shop/data/repositories/home_repository.dart';
+import 'package:shop/data/repositories/product_repository.dart';
 import 'package:shop/data/repositories/user_repository.dart';
 import 'package:shop/data/routes/app_routes.dart';
 import 'package:shop/data/routes/navigation_service.dart';
@@ -34,6 +40,9 @@ class MyApp extends StatelessWidget {
             providers: [
               RepositoryProvider(create: (_) => AuthRepository()),
               RepositoryProvider(create: (_) => UserRepository()),
+              RepositoryProvider(create: (_) => HomeRepository()),
+              RepositoryProvider(create: (_) => CategoryRepository()),
+              RepositoryProvider(create: (_) => ProductRepository()),
             ],
             child: MultiBlocProvider(
               providers: [
@@ -45,6 +54,21 @@ class MyApp extends StatelessWidget {
                 BlocProvider(
                   create: (context) => UserCubit(
                     context.read<UserRepository>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => HomeCubit(
+                    context.read<HomeRepository>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => CategoryCubit(
+                    context.read<CategoryRepository>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => ProductCubit(
+                    context.read<ProductRepository>(),
                   ),
                 ),
               ],

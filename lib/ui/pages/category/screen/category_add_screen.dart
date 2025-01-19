@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shop/cubit/category/category_cubit.dart';
+import 'package:shop/cubit/category/category_state.dart';
+import 'package:shop/cubit/home/home_cubit.dart';
+import 'package:shop/data/enums/forms_status.dart';
+import 'package:shop/data/models/category_model.dart';
+import 'package:shop/data/routes/app_routes.dart';
+import 'package:shop/data/routes/navigation_service.dart';
 import 'package:shop/data/utils/app/app_siza.dart';
-import 'package:shop/ui/pages/category/widget/custom_button.dart';
+import 'package:shop/ui/core/constant/fixed_names.dart';
+import 'package:shop/ui/pages/widgets/custom_button.dart';
 import 'package:shop/ui/pages/widgets/my_app_bar_widget.dart';
 
 class CategoryAddScreen extends StatefulWidget {
@@ -12,7 +21,7 @@ class CategoryAddScreen extends StatefulWidget {
 }
 
 class _CategoryAddScreenState extends State<CategoryAddScreen> {
-  String imageURL = "";
+  String imageUrl = "";
   String categoryName = "";
 
   @override
@@ -23,72 +32,78 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
         loadingIcon: true,
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 30.h),
-        child: Column(
-          children: [
-            if (imageURL.isNotEmpty)
-              SizedBox(
-                width: width,
-                height: 200.h,
-                // child: Image.network(
-                //   imgURL,
-                //   fit: BoxFit.cover,
-                //   errorBuilder: (context, error, stackTrace) {
-                //     return const Center(child: Text('Invalid Image URL'));
-                //   },
-                // ),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    image: DecorationImage(
-                      image: NetworkImage(imageURL),
-                      fit: BoxFit.contain,
+      body: BlocConsumer<CategoryCubit, CategoryState>(
+        builder: (BuildContext context, state) {
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 30.h),
+            child: Column(
+              children: [
+                if (imageUrl.isNotEmpty)
+                  SizedBox(
+                    width: width,
+                    height: 200.h,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.r),
+                        image: DecorationImage(
+                          image: NetworkImage(imageUrl),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
                     ),
                   ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Enter image url",
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      imageUrl = value;
+                    });
+                  },
                 ),
-              ),
-            TextFormField(
-              decoration: InputDecoration(
-                hintText: "Enter image url",
-              ),
-              onChanged: (value) {
-                setState(() {
-                  imageURL = value;
-                });
-              },
+                20.getH(),
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Enter category name",
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      categoryName = value;
+                    });
+                  },
+                ),
+                20.getH(),
+                CustomButton(
+                  isLoader: state.formsStatus == FormsStatus.loading,
+                  onTap: () {
+                    context.read<CategoryCubit>().addCategory(
+                          categoryModel: CategoryModel(
+                            imageUrl: imageUrl,
+                            title: categoryName,
+                            categoryId: "",
+                          ),
+                        );
+                  },
+                  isActive: checkInput(),
+                ),
+              ],
             ),
-            20.getH(),
-            TextFormField(
-              decoration: InputDecoration(
-                hintText: "Enter category name",
-              ),
-              onChanged: (value) {
-                setState(() {
-                  categoryName = value;
-                });
-              },
-            ),
-            // MyTextFormFieldWidget(
-            //   hintText: "Enter category name...",
-            //   onChanged: (value) {
-            //     setState(() {
-            //       categoryName = value;
-            //     });
-            //   },
-            // ),
-            20.getH(),
-            CustomButton(
-              onTap: () {},
-              isActive: checkInput(),
-            ),
-          ],
-        ),
+          );
+        },
+        listener: (BuildContext context, state) {
+          if (state.statusMessage == FixedNames.pop) {
+            context.read<HomeCubit>().getCategories();
+            NavigationService.instance.navigateMyScreenAndRemoveUntil(
+              routeName: AppRoutesNames.home,
+            );
+          }
+        },
       ),
     );
   }
 
   bool checkInput() {
-    return imageURL.isNotEmpty && categoryName.isNotEmpty;
+    return imageUrl.isNotEmpty && categoryName.isNotEmpty;
   }
 }
