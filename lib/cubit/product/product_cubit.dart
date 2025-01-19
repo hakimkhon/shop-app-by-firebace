@@ -36,7 +36,10 @@ class ProductCubit extends Cubit<ProductState> {
         await _productRepository.updateProduct(productModel: productModel);
 
     if (networkResponse.errorText.isEmpty) {
-      emit(state.copyWith(formsStatus: FormsStatus.success));
+      emit(state.copyWith(
+        formsStatus: FormsStatus.success,
+        statusMessage: FixedNames.pop,
+      ));
     } else {
       setStateError(networkResponse.errorText);
     }

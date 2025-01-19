@@ -109,7 +109,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           arguments: state.products[index],
                         );
                       },
-                      onLongPress: () {},
+                      onLongPress: () {
+                        NavigationService.instance.navigateMyScreen(
+                          routeName: AppRoutesNames.productEdit,
+                          arguments: state.products[index],
+                        );
+                      },
                       productModel: state.products[index],
                     );
                   },
