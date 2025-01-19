@@ -20,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int activeIndexCategoryId = 0;
+
   @override
   void initState() {
     Future.microtask(
@@ -80,12 +82,51 @@ class _HomeScreenState extends State<HomeScreen> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: List.generate(
-                      state.categories.length,
+                      state.categories.length + 1,
                       (index) {
+                        if (index == 0) {
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                activeIndexCategoryId = index;
+                              });
+                              context.read<HomeCubit>().getCategories();
+                            },
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: Colors.orange.withValues(
+                                  alpha: activeIndexCategoryId == 0 ? 1 : 0.3,
+                                ),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(13.w),
+                                child: Text(
+                                  "All",
+                                  style: TextStyle(
+                                    color: activeIndexCategoryId == 0
+                                        ? Colors.black
+                                        : Colors.grey,
+                                    fontSize: 16.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
                         return CategoryItem(
-                          onTap: () {},
+                          onTap: () {
+                            setState(() {
+                              activeIndexCategoryId = index;
+                            });
+                            context.read<HomeCubit>().setCategoty(
+                                  categoryId:
+                                      state.categories[index - 1].categoryId,
+                                );
+                          },
                           onLongPress: () {},
-                          categoryModel: state.categories[index],
+                          categoryModel: state.categories[index - 1],
+                          isActiva: activeIndexCategoryId == index,
                         );
                       },
                     ),

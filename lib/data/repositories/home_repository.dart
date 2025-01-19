@@ -54,4 +54,30 @@ class HomeRepository {
 
     return networkResponse;
   }
+
+  Future<NetworkResponse> getProductsForCategoryId(
+      {required String productId}) async {
+    NetworkResponse networkResponse = NetworkResponse();
+
+    try {
+      var result = await _firebaseFirestore
+          .collection(FixedNames.products)
+          .where(FixedNames.productId, isEqualTo: productId)
+          .get();
+
+      networkResponse.data = result.docs
+          .map((value) => ProductModel.fromJson(value.data()))
+          .toList();
+    } on FirebaseException catch (e) {
+      log(e.friendlyMessage);
+
+      networkResponse.errorText = e.friendlyMessage;
+    } catch (e) {
+      log("Nomalum xatolik catch $e");
+
+      networkResponse.errorText = "Nomalum xatolik catch $e";
+    }
+
+    return networkResponse;
+  }
 }

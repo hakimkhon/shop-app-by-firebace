@@ -7,12 +7,14 @@ class CategoryItem extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onLongPress;
   final CategoryModel categoryModel;
+  final bool isActiva;
 
   const CategoryItem({
     super.key,
     required this.onTap,
     required this.categoryModel,
     required this.onLongPress,
+    required this.isActiva,
   });
 
   @override
@@ -24,13 +26,18 @@ class CategoryItem extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 2.w),
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: Colors.amber[800],
+            color: Colors.amber.withValues(alpha: isActiva ? 1 : 0.3),
             borderRadius: BorderRadius.circular(8.r),
           ),
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 6.w, bottom: 6.w, left: 10.w, right: 6.w,),
+                padding: EdgeInsets.only(
+                  top: 6.w,
+                  bottom: 6.w,
+                  left: 10.w,
+                  right: 6.w,
+                ),
                 child: CircleAvatar(
                   backgroundImage: NetworkImage(categoryModel.imageUrl),
                 ),
@@ -38,7 +45,7 @@ class CategoryItem extends StatelessWidget {
               Text(
                 categoryModel.title,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: isActiva ? Colors.black: Colors.grey,
                   fontSize: 16.sp,
                 ),
               ),
