@@ -29,11 +29,11 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  Future<void> updateProduct({required ProductModel productModel}) async {
+  Future<void> updateProductCubit({required ProductModel productModel}) async {
     emit(state.copyWith(formsStatus: FormsStatus.loading));
 
     NetworkResponse networkResponse =
-        await _productRepository.updateProduct(productModel: productModel);
+        await _productRepository.updateProductRepository(productModel: productModel);
 
     if (networkResponse.errorText.isEmpty) {
       emit(state.copyWith(

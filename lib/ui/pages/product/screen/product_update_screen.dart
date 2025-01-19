@@ -6,6 +6,7 @@ import 'package:shop/cubit/home/home_cubit.dart';
 import 'package:shop/cubit/product/product_cubit.dart';
 import 'package:shop/cubit/product/product_state.dart';
 import 'package:shop/data/enums/forms_status.dart';
+import 'package:shop/data/local/storage_repository.dart';
 import 'package:shop/data/models/category_model.dart';
 import 'package:shop/data/models/product_model.dart';
 import 'package:shop/data/routes/app_routes.dart';
@@ -148,16 +149,20 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
                 CustomButton(
                   isLoader: state.formsStatus == FormsStatus.loading,
                   onTap: () {
+                    String adminId =
+                        StorageRepository.getString(key: FixedNames.adminId);
                     ProductModel productModel = ProductModel(
+                      productId: '',
                       imageUrl: _controllerImageUrl.text,
                       title: _controllerProductName.text,
-                      productId: "",
+                      categoryId: categoryModel!.categoryId,
                       price: _controllerPrice.text,
                       description: _controllerDescription.text,
+                      adminId: adminId,
                     );
                     context
                         .read<ProductCubit>()
-                        .updateProduct(productModel: productModel);
+                        .updateProductCubit(productModel: productModel);
                   },
                   isActive: checkInput(),
                 ),

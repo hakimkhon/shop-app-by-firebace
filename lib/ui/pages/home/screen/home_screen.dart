@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop/cubit/home/home_cubit.dart';
 import 'package:shop/cubit/home/home_state.dart';
 import 'package:shop/cubit/user/user_cubit.dart';
 import 'package:shop/data/enums/forms_status.dart';
+import 'package:shop/data/local/storage_repository.dart';
 import 'package:shop/data/routes/app_routes.dart';
 import 'package:shop/data/routes/navigation_service.dart';
+import 'package:shop/ui/core/constant/fixed_names.dart';
 import 'package:shop/ui/pages/category/widget/category_item.dart';
 import 'package:shop/ui/pages/widgets/my_app_bar_widget.dart';
 import 'package:shop/ui/pages/product/widget/product_item.dart';
@@ -119,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             setState(() {
                               activeIndexCategoryId = index;
                             });
-                            context.read<HomeCubit>().setCategoty(
+                            context.read<HomeCubit>().setCategory(
                                   categoryId:
                                       state.categories[index - 1].categoryId,
                                 );
@@ -175,6 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Foydalanuvchi ma'lumotlarini tozalash
     await prefs.clear();
 
+    StorageRepository.setString(key: FixedNames.adminId, value: "");
     // Navigatsiya: kirish ekraniga o'tkazish va barcha eski sahifalarni olib tashlash
     NavigationService.instance.navigateMyScreenAndRemoveUntil(
       routeName: AppRoutesNames.regist,

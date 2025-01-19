@@ -10,15 +10,20 @@ class HomeCubit extends Cubit<HomeState> {
 
   final HomeRepository _homeRepository;
 
-  Future<void> setCategoty({required String categoryId}) async {
+  Future<void> setCategory({required String categoryId}) async {
     emit(state.copyWith(formsStatus: FormsStatus.loading));
 
     NetworkResponse networkResponse =
-        await _homeRepository.getProductsForCategoryId(productId: categoryId);
+        await _homeRepository.getProductsForCategoryId(categoryId: categoryId);
 
     if (networkResponse.errorText.isEmpty) {
-      emit(state.copyWith(categories: networkResponse.data));
-      getProducts();
+      emit(
+        state.copyWith(
+          formsStatus: FormsStatus.success,
+          products: networkResponse.data,
+        ),
+      );
+      // getProducts();
     } else {
       if (networkResponse.errorText == FixedNames.notFound) {
         emit(state.copyWith(formsStatus: FormsStatus.unAuthenticated));

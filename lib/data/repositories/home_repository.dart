@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shop/data/local/storage_repository.dart';
 import 'package:shop/data/models/category_model.dart';
 import 'package:shop/data/models/network_response.dart';
 import 'package:shop/data/models/product_model.dart';
@@ -10,11 +11,14 @@ class HomeRepository {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   Future<NetworkResponse> getCategories() async {
+    // String adminId = StorageRepository.getString(key: FixedNames.adminId);
     NetworkResponse networkResponse = NetworkResponse();
 
     try {
-      var result =
-          await _firebaseFirestore.collection(FixedNames.categories).get();
+      var result = await _firebaseFirestore
+          .collection(FixedNames.categories)
+          // .where(FixedNames.adminId, isEqualTo: adminId)
+          .get();
 
       networkResponse.data = result.docs
           .map((value) => CategoryModel.fromJson(value.data()))
@@ -33,11 +37,15 @@ class HomeRepository {
   }
 
   Future<NetworkResponse> getProducts() async {
+    String adminId = StorageRepository.getString(key: FixedNames.adminId);
+
     NetworkResponse networkResponse = NetworkResponse();
 
     try {
-      var result =
-          await _firebaseFirestore.collection(FixedNames.products).get();
+      var result = await _firebaseFirestore
+          .collection(FixedNames.products)
+          .where(FixedNames.adminId, isEqualTo: adminId)
+          .get();
 
       networkResponse.data = result.docs
           .map((value) => ProductModel.fromJson(value.data()))
@@ -56,13 +64,15 @@ class HomeRepository {
   }
 
   Future<NetworkResponse> getProductsForCategoryId(
-      {required String productId}) async {
+      {required String categoryId}) async {
+    String adminId = StorageRepository.getString(key: FixedNames.adminId);
     NetworkResponse networkResponse = NetworkResponse();
 
     try {
       var result = await _firebaseFirestore
           .collection(FixedNames.products)
-          .where(FixedNames.productId, isEqualTo: productId)
+          .where(FixedNames.categoryId, isEqualTo: categoryId)
+          .where(FixedNames.adminId, isEqualTo: adminId)
           .get();
 
       networkResponse.data = result.docs

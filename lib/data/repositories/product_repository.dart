@@ -36,7 +36,7 @@ class ProductRepository {
     return networkResponse;
   }
 
-  Future<NetworkResponse> updateProduct({
+  Future<NetworkResponse> updateProductRepository({
     required ProductModel productModel,
   }) async {
     NetworkResponse networkResponse = NetworkResponse();
