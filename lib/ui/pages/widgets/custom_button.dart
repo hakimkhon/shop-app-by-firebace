@@ -17,9 +17,13 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
-          backgroundColor:
-              isActive ? Colors.blue : Colors.grey.withValues(alpha: 0.8),
-          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w)),
+        backgroundColor:
+            isActive ? Colors.blue : Colors.grey.withValues(alpha: 0.8),
+        padding: EdgeInsets.symmetric(
+          vertical: 10.h,
+          horizontal: 20.w,
+        ),
+      ),
       onPressed: isLoader
           ? null
           : isActive

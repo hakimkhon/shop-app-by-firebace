@@ -143,28 +143,55 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
                   ),
                 ),
                 20.getH(),
-                CustomButton(
-                  isLoader: state.formsStatus == FormsStatus.loading,
-                  onTap: () {
-                    context.read<ProductCubit>().updateProductCubit(
-                          productModel: widget.productModel.copyWith(
-                            imageUrl: _controllerImageUrl.text,
-                            title: _controllerProductName.text,
-                            categoryId: categoryModel!.categoryId,
-                            price: _controllerPrice.text,
-                            description: _controllerDescription.text,
-                          ),
-                          productId: widget.productModel.productId,
-                        );
-                  },
-                  isActive: checkInput(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    CustomButton(
+                      isLoader: state.formsStatus == FormsStatus.loading,
+                      onTap: () {
+                        context.read<ProductCubit>().updateProduct(
+                              productModel: widget.productModel.copyWith(
+                                imageUrl: _controllerImageUrl.text,
+                                title: _controllerProductName.text,
+                                categoryId: categoryModel!.categoryId,
+                                price: _controllerPrice.text,
+                                description: _controllerDescription.text,
+                              ),
+                              productId: widget.productModel.productId,
+                            );
+                      },
+                      isActive: checkInput(),
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10.h,
+                          horizontal: 20.w,
+                        ),
+                      ),
+                      onPressed: () {
+                        context.read<ProductCubit>().deleteProduct(
+                              productId: widget.productModel.productId,
+                            );
+                      },
+                      child: state.formsStatus == FormsStatus.subLoading
+                          ? CircularProgressIndicator.adaptive()
+                          : Text(
+                              "Delete",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                    ),
+                  ],
                 ),
               ],
             ),
           );
         },
         listener: (BuildContext context, state) {
-          debugPrint("State statusMessage ${state.statusMessage}");
           if (state.statusMessage == FixedNames.pop) {
             context.read<HomeCubit>().getCategories();
             NavigationService.instance.navigateMyScreenAndRemoveUntil(

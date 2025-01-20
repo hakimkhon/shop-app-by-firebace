@@ -29,7 +29,7 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  Future<void> updateProductCubit({
+  Future<void> updateProduct({
     required ProductModel productModel,
     required String productId,
   }) async {
@@ -40,6 +40,25 @@ class ProductCubit extends Cubit<ProductState> {
       productId: productId,
     );
 
+    if (networkResponse.errorText.isEmpty) {
+      emit(state.copyWith(
+        formsStatus: FormsStatus.success,
+        statusMessage: FixedNames.pop,
+      ));
+    } else {
+      setStateError(networkResponse.errorText);
+    }
+  }
+
+  Future<void> deleteProduct({required String productId}) async {
+    emit(state.copyWith(formsStatus: FormsStatus.subLoading));
+
+    // Mahsulotni o'chirish uchun repository'ga murojaat
+    NetworkResponse networkResponse = await _productRepository.deleteProduct(
+      productId: productId,
+    );
+
+    // Javobni tekshirish
     if (networkResponse.errorText.isEmpty) {
       emit(state.copyWith(
         formsStatus: FormsStatus.success,

@@ -11,13 +11,11 @@ class HomeRepository {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   Future<NetworkResponse> getCategories() async {
-    // String adminId = StorageRepository.getString(key: FixedNames.adminId);
     NetworkResponse networkResponse = NetworkResponse();
 
     try {
       var result = await _firebaseFirestore
           .collection(FixedNames.categories)
-          // .where(FixedNames.adminId, isEqualTo: adminId)
           .get();
 
       networkResponse.data = result.docs

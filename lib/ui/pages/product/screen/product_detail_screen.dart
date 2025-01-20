@@ -15,7 +15,6 @@ class ProductDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // List<CategoryModel> categories = context.read<HomeCubit>().state.categories;
     return Scaffold(
       appBar: MyAppBar(
         title: "Detail Product",
@@ -64,7 +63,6 @@ class ProductDetailScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            
             40.getH(),
             CustomButton(
               onTap: () {
