@@ -64,6 +64,7 @@ class ProductDetailScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            
             40.getH(),
             CustomButton(
               onTap: () {
