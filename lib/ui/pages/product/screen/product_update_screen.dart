@@ -160,9 +160,10 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
                       description: _controllerDescription.text,
                       adminId: adminId,
                     );
-                    context
-                        .read<ProductCubit>()
-                        .updateProductCubit(productModel: productModel);
+                    context.read<ProductCubit>().updateProductCubit(
+                          productModel: productModel,
+                          productId: productModel.productId,
+                        );
                   },
                   isActive: checkInput(),
                 ),

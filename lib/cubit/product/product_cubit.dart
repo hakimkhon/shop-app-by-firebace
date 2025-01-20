@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop/cubit/product/product_state.dart';
 import 'package:shop/data/enums/forms_status.dart';
@@ -29,11 +30,21 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  Future<void> updateProductCubit({required ProductModel productModel}) async {
+  Future<void> updateProductCubit({
+    required ProductModel productModel,
+    required String productId,
+  }) async {
     emit(state.copyWith(formsStatus: FormsStatus.loading));
 
-    NetworkResponse networkResponse =
-        await _productRepository.updateProductRepository(productModel: productModel);
+    // NetworkResponse networkResponse = await _productRepository.updateProduct(
+    //   productModel: productModel,
+    //   productId: productId,
+    // );
+    NetworkResponse networkResponse = await _productRepository.updateProductFromGit(
+      productModel: productModel,
+    );
+
+    debugPrint("++++++++++${networkResponse.errorText}\n");
 
     if (networkResponse.errorText.isEmpty) {
       emit(state.copyWith(

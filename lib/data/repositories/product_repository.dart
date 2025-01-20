@@ -28,22 +28,50 @@ class ProductRepository {
 
       networkResponse.errorText = e.friendlyMessage;
     } catch (e) {
-      log("Noma'lum xatolik: catch (e) ");
+      log("Noma'lum xatolik: catch $e ");
 
-      networkResponse.errorText = "Noma'lum xatolik: catch (e) ";
+      networkResponse.errorText = "Noma'lum xatolik: catch $e ";
     }
 
     return networkResponse;
   }
 
-  Future<NetworkResponse> updateProductRepository({
+  Future<NetworkResponse> updateProduct({
+    required ProductModel productModel,
+    required String productId,
+  }) async {
+    NetworkResponse networkResponse = NetworkResponse();
+
+    try {
+      var result = _firebaseFirestore
+          .collection(FixedNames.products)
+          .doc(productId);
+
+      await _firebaseFirestore
+          .collection(FixedNames.products)
+          .doc(result.id) // Mahsulot IDsi kerak
+          .update(productModel.toJson()); // Yangilanish ma'lumotlari
+    } on FirebaseException catch (e) {
+      log(e.friendlyMessage);
+
+      networkResponse.errorText = e.friendlyMessage;
+    } catch (e) {
+      log("Noma'lum xatolik: catch $e");
+
+      networkResponse.errorText = "Noma'lum xatolik: catch $e";
+    }
+
+    return networkResponse;
+  }
+
+  Future<NetworkResponse> updateProductFromGit({
     required ProductModel productModel,
   }) async {
     NetworkResponse networkResponse = NetworkResponse();
 
     try {
       await _firebaseFirestore
-          .collection(FixedNames.products)
+          .collection("product")
           .doc(productModel.productId)
           .update(productModel.toJson());
     } on FirebaseException catch (e) {
@@ -51,9 +79,9 @@ class ProductRepository {
 
       networkResponse.errorText = e.friendlyMessage;
     } catch (e) {
-      log("Noma'lum xatolik: catch (e) ");
+      log("Noma'lum xatolik: catch $e ");
 
-      networkResponse.errorText = "Noma'lum xatolik: catch (e) ";
+      networkResponse.errorText = "Noma'lum xatolik: catch $e ";
     }
 
     return networkResponse;
