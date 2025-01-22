@@ -78,42 +78,40 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
                     ),
                   ),
                 TextFormField(
-                  // decoration: InputDecoration(
-                  // ),
                   controller: _controllerImageUrl,
                   onChanged: (value) {
-                    setState(() {
-                      _controllerImageUrl.text = value;
-                    });
+                    setState(
+                      () {
+                        _controllerImageUrl.text = value;
+                      },
+                    );
                   },
                 ),
                 20.getH(),
                 TextFormField(
-                  // decoration: InputDecoration(
-                  // ),
                   controller: _controllerProductName,
                   onChanged: (value) {
-                    setState(() {
-                      _controllerProductName.text = value;
-                    });
+                    setState(
+                      () {
+                        _controllerProductName.text = value;
+                      },
+                    );
                   },
                 ),
                 20.getH(),
                 TextFormField(
-                  // decoration: InputDecoration(
-                  // ),
                   controller: _controllerDescription,
                   onChanged: (value) {
-                    setState(() {
-                      _controllerDescription.text = value;
-                    });
+                    setState(
+                      () {
+                        _controllerDescription.text = value;
+                      },
+                    );
                   },
                 ),
                 20.getH(),
                 TextFormField(
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  // decoration: InputDecoration(
-                  // ),
                   controller: _controllerPrice,
                   onChanged: (value) {
                     setState(() {
@@ -130,9 +128,11 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
                     (index) {
                       return ListTile(
                         onTap: () {
-                          setState(() {
-                            categoryModel = categories[index];
-                          });
+                          setState(
+                            () {
+                              categoryModel = categories[index];
+                            },
+                          );
                           _expansionTileController.collapse();
                         },
                         leading: CircleAvatar(
@@ -153,9 +153,9 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
                       onTap: () {
                         NotificationService.showNotification(
                           id: IdGeneration.id(),
-                          title: "Yangilanish",
-                          body: "${widget.productModel.title} o'zgartirildi !",
-                          // payload: "buni nima ekanligini bilmadim",
+                          title: "Modifire",
+                          body:
+                              "${widget.productModel.title} has been modified",
                         );
                         context.read<ProductCubit>().updateProduct(
                               productModel: widget.productModel.copyWith(
@@ -179,34 +179,10 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
                         ),
                       ),
                       onPressed: () {
-                        debugPrint("Delete bosildi\n");
-                        // ConfirmationDialog(
-                        //   onConfirmed: () {
-                        //     debugPrint("Dialog ishladi\n");
-                        //     context.read<ProductCubit>().deleteProduct(
-                        //           productId: widget.productModel.productId,
-                        //         );
-                        //     Navigator.of(context).pop(); // Dialogni yopish
-                        //     //notification orqali o'shirilganini ma'lum qilish
-                        //     NotificationService.showNotification(
-                        //       id: IdGeneration.id(),
-                        //       title: "O'chirish",
-                        //       body: "${widget.productModel.title} o'chirildi !",
-                        //       // payload: "buni nima ekanligini bilmadim",
-                        //     );
-                        //     //snakbar orqali o'shirilganini ma'lum qilish
-                        //     // ScaffoldMessenger.of(context).showSnackBar(
-                        //     //   SnackBar(
-                        //     //     content: Text('Fayl o\'chirildi!'),
-                        //     //   ),
-                        //     // );
-                        //   },
-                        // );
-
                         _showConfirmationDialog(
                           context,
-                          "O'chirish",
-                          "${widget.productModel.title} o'chirildi !",
+                          "Delete",
+                          "${widget.productModel.title} deleted !",
                         );
                       },
                       child: state.formsStatus == FormsStatus.subLoading
@@ -243,17 +219,31 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Tasdiqlash'),
-          content: Text('Siz haqiqatan ham o\'chirmoqchimisiz?'),
+          title: Text('Confirmation'),
+          content: Text('Are you sure you want to delete?'),
           actions: [
             TextButton(
-              child: Text('Yo\'q'),
+              style: TextButton.styleFrom(backgroundColor: Colors.green),
+              child: Text(
+                'No',
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: Colors.white,
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop(); // Dialogni yopish
               },
             ),
             TextButton(
-              child: Text('Ha'),
+              style: TextButton.styleFrom(backgroundColor: Colors.red),
+              child: Text(
+                'Yes',
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: Colors.white,
+                ),
+              ),
               onPressed: () {
                 context.read<ProductCubit>().deleteProduct(
                       productId: widget.productModel.productId,
@@ -265,7 +255,6 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
                   id: IdGeneration.id(),
                   title: processName,
                   body: valueName,
-                  // payload: "buni nima ekanligini bilmadim",
                 );
               },
             ),
