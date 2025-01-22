@@ -6,6 +6,7 @@ import 'package:shop/cubit/auth/auth_state.dart';
 import 'package:shop/data/enums/forms_status.dart';
 import 'package:shop/data/routes/app_routes.dart';
 import 'package:shop/data/routes/navigation_service.dart';
+import 'package:shop/data/service/notifi_server.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -17,6 +18,13 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _controllerPhoneNumber = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+
+  @override
+  void initState() {
+    NotificationService.initNotification();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +59,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     controller: _controllerPassword,
                     keyboardType: TextInputType.visiblePassword,
                   ),
-                  
                   30.verticalSpace,
                   TextButton(
                     style: TextButton.styleFrom(

@@ -40,6 +40,9 @@ dependencies:
   flutter_bloc: ^9.0.0
   flutter_screenutil: ^5.9.3
   cloud_firestore: ^5.6.1
+  flutter_local_notifications: ^18.0.1
+  permission_handler: ^11.3.1
+  intl: ^0.20.1
 
 dev_dependencies:
   flutter_test:

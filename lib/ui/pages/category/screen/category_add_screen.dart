@@ -8,8 +8,10 @@ import 'package:shop/data/enums/forms_status.dart';
 import 'package:shop/data/models/category_model.dart';
 import 'package:shop/data/routes/app_routes.dart';
 import 'package:shop/data/routes/navigation_service.dart';
+import 'package:shop/data/service/notifi_server.dart';
 import 'package:shop/data/utils/app/app_siza.dart';
 import 'package:shop/ui/core/constant/fixed_names.dart';
+import 'package:shop/ui/core/constant/id_generation.dart';
 import 'package:shop/ui/pages/widgets/custom_button.dart';
 import 'package:shop/ui/pages/widgets/my_app_bar_widget.dart';
 
@@ -84,6 +86,13 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
                             categoryId: "",
                           ),
                         );
+
+                    NotificationService.showNotification(
+                      id: IdGeneration.id(),
+                      title: "Add Category",
+                      body: "$categoryName adding !",
+                      // payload: "buni nima ekanligini bilmadim",
+                    );
                   },
                   isActive: checkInput(),
                 ),

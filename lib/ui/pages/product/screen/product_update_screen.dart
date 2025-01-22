@@ -10,8 +10,10 @@ import 'package:shop/data/models/category_model.dart';
 import 'package:shop/data/models/product_model.dart';
 import 'package:shop/data/routes/app_routes.dart';
 import 'package:shop/data/routes/navigation_service.dart';
+import 'package:shop/data/service/notifi_server.dart';
 import 'package:shop/data/utils/app/app_siza.dart';
 import 'package:shop/ui/core/constant/fixed_names.dart';
+import 'package:shop/ui/core/constant/id_generation.dart';
 import 'package:shop/ui/pages/widgets/custom_button.dart';
 import 'package:shop/ui/pages/widgets/my_app_bar_widget.dart';
 
@@ -149,6 +151,12 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
                     CustomButton(
                       isLoader: state.formsStatus == FormsStatus.loading,
                       onTap: () {
+                        NotificationService.showNotification(
+                          id: IdGeneration.id(),
+                          title: "Yangilanish",
+                          body: "${widget.productModel.title} o'zgartirildi !",
+                          // payload: "buni nima ekanligini bilmadim",
+                        );
                         context.read<ProductCubit>().updateProduct(
                               productModel: widget.productModel.copyWith(
                                 imageUrl: _controllerImageUrl.text,
@@ -171,9 +179,35 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
                         ),
                       ),
                       onPressed: () {
-                        context.read<ProductCubit>().deleteProduct(
-                              productId: widget.productModel.productId,
-                            );
+                        debugPrint("Delete bosildi\n");
+                        // ConfirmationDialog(
+                        //   onConfirmed: () {
+                        //     debugPrint("Dialog ishladi\n");
+                        //     context.read<ProductCubit>().deleteProduct(
+                        //           productId: widget.productModel.productId,
+                        //         );
+                        //     Navigator.of(context).pop(); // Dialogni yopish
+                        //     //notification orqali o'shirilganini ma'lum qilish
+                        //     NotificationService.showNotification(
+                        //       id: IdGeneration.id(),
+                        //       title: "O'chirish",
+                        //       body: "${widget.productModel.title} o'chirildi !",
+                        //       // payload: "buni nima ekanligini bilmadim",
+                        //     );
+                        //     //snakbar orqali o'shirilganini ma'lum qilish
+                        //     // ScaffoldMessenger.of(context).showSnackBar(
+                        //     //   SnackBar(
+                        //     //     content: Text('Fayl o\'chirildi!'),
+                        //     //   ),
+                        //     // );
+                        //   },
+                        // );
+
+                        _showConfirmationDialog(
+                          context,
+                          "O'chirish",
+                          "${widget.productModel.title} o'chirildi !",
+                        );
                       },
                       child: state.formsStatus == FormsStatus.subLoading
                           ? CircularProgressIndicator.adaptive()
@@ -200,6 +234,44 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
           }
         },
       ),
+    );
+  }
+
+  void _showConfirmationDialog(
+      BuildContext context, String processName, String valueName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Tasdiqlash'),
+          content: Text('Siz haqiqatan ham o\'chirmoqchimisiz?'),
+          actions: [
+            TextButton(
+              child: Text('Yo\'q'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dialogni yopish
+              },
+            ),
+            TextButton(
+              child: Text('Ha'),
+              onPressed: () {
+                context.read<ProductCubit>().deleteProduct(
+                      productId: widget.productModel.productId,
+                    );
+                Navigator.of(context).pop(); // Dialogni yopish
+
+                //notification orqali o'shirilganini ma'lum qilish
+                NotificationService.showNotification(
+                  id: IdGeneration.id(),
+                  title: processName,
+                  body: valueName,
+                  // payload: "buni nima ekanligini bilmadim",
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

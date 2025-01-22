@@ -11,8 +11,10 @@ import 'package:shop/data/models/category_model.dart';
 import 'package:shop/data/models/product_model.dart';
 import 'package:shop/data/routes/app_routes.dart';
 import 'package:shop/data/routes/navigation_service.dart';
+import 'package:shop/data/service/notifi_server.dart';
 import 'package:shop/data/utils/app/app_siza.dart';
 import 'package:shop/ui/core/constant/fixed_names.dart';
+import 'package:shop/ui/core/constant/id_generation.dart';
 import 'package:shop/ui/pages/widgets/custom_button.dart';
 import 'package:shop/ui/pages/widgets/my_app_bar_widget.dart';
 
@@ -132,7 +134,7 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                 CustomButton(
                   isLoader: state.formsStatus == FormsStatus.loading,
                   onTap: () {
-                     String adminId =
+                    String adminId =
                         StorageRepository.getString(key: FixedNames.adminId);
                     ProductModel productModel = ProductModel(
                       productId: '',
@@ -140,12 +142,19 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                       title: productName,
                       categoryId: categoryModel?.categoryId ?? "",
                       price: price,
-                      description: description, 
+                      description: description,
                       adminId: adminId,
                     );
                     context
                         .read<ProductCubit>()
                         .addProduct(productModel: productModel);
+
+                    NotificationService.showNotification(
+                      id: IdGeneration.id(),
+                      title: "Add Product",
+                      body: "$productName adding !",
+                      // payload: "buni nima ekanligini bilmadim",
+                    );
                   },
                   isActive: checkInput(),
                 ),
