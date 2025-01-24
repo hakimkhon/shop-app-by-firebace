@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shop/data/local/storage_repository.dart';
 import 'package:shop/data/models/category_model.dart';
 import 'package:shop/data/models/network_response.dart';
 import 'package:shop/data/models/product_model.dart';
