@@ -5,7 +5,6 @@ import 'package:shop/data/enums/forms_status.dart';
 import 'package:shop/data/models/network_response.dart';
 import 'package:shop/data/models/product_model.dart';
 import 'package:shop/data/repositories/home_repository.dart';
-import 'package:shop/ui/core/constant/fixed_names.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this._homeRepository) : super(HomeState.initial());
@@ -18,15 +17,11 @@ class HomeCubit extends Cubit<HomeState> {
 
     NetworkResponse networkResponse = await _homeRepository.getCategories();
 
-    if (networkResponse.errorText.isEmpty) {
+     if (networkResponse.errorText.isEmpty) {
       emit(state.copyWith(categories: networkResponse.data));
       listenProducts();
     } else {
-      if (networkResponse.errorText == FixedNames.notFound) {
-        emit(state.copyWith(formsStatus: FormsStatus.unAuthenticated));
-      } else {
-        setStateToError(networkResponse.errorText);
-      }
+      setStateToError(networkResponse.errorText);
     }
   }
 

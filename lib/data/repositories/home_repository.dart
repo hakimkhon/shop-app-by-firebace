@@ -61,7 +61,7 @@ class HomeRepository {
 
   Stream<List<ProductModel>> getProduct({String categoryId = ""}) {
     try {
-      return _firebaseFirestore.collection("product").snapshots().map(
+      return _firebaseFirestore.collection(FixedNames.products).snapshots().map(
             (snapshot) => snapshot.docs
                 .map((doc) => ProductModel.fromJson(doc.data()))
                 .where((product) =>
