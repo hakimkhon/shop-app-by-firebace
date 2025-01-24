@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop/cubit/home/home_state.dart';
 import 'package:shop/data/enums/forms_status.dart';
 import 'package:shop/data/models/network_response.dart';
+import 'package:shop/data/models/product_model.dart';
 import 'package:shop/data/repositories/home_repository.dart';
 import 'package:shop/ui/core/constant/fixed_names.dart';
 
@@ -9,29 +11,7 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this._homeRepository) : super(HomeState.initial());
 
   final HomeRepository _homeRepository;
-
-  Future<void> setCategory({required String categoryId}) async {
-    emit(state.copyWith(formsStatus: FormsStatus.loading));
-
-    NetworkResponse networkResponse =
-        await _homeRepository.getProductsForCategoryId(categoryId: categoryId);
-
-    if (networkResponse.errorText.isEmpty) {
-      emit(
-        state.copyWith(
-          formsStatus: FormsStatus.success,
-          products: networkResponse.data,
-        ),
-      );
-      // getProducts();
-    } else {
-      if (networkResponse.errorText == FixedNames.notFound) {
-        emit(state.copyWith(formsStatus: FormsStatus.unAuthenticated));
-      } else {
-        setStateToError(networkResponse.errorText);
-      }
-    }
-  }
+  late StreamSubscription<List<ProductModel>> productsListen;
 
   Future<void> getCategories() async {
     emit(state.copyWith(formsStatus: FormsStatus.loading));
@@ -40,7 +20,7 @@ class HomeCubit extends Cubit<HomeState> {
 
     if (networkResponse.errorText.isEmpty) {
       emit(state.copyWith(categories: networkResponse.data));
-      getProducts();
+      listenProducts();
     } else {
       if (networkResponse.errorText == FixedNames.notFound) {
         emit(state.copyWith(formsStatus: FormsStatus.unAuthenticated));
@@ -50,25 +30,24 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<void> getProducts() async {
+    Future<void> listenProducts([String categoryId = ""]) async {
     emit(state.copyWith(formsStatus: FormsStatus.loading));
 
-    NetworkResponse networkResponse = await _homeRepository.getProducts();
-
-    if (networkResponse.errorText.isEmpty) {
-      emit(
-        state.copyWith(
-          formsStatus: FormsStatus.success,
-          products: networkResponse.data,
-        ),
-      );
-    } else {
-      if (networkResponse.errorText == FixedNames.notFound) {
-        emit(state.copyWith(formsStatus: FormsStatus.unAuthenticated));
-      } else {
-        setStateToError(networkResponse.errorText);
-      }
-    }
+    productsListen = _homeRepository.getProduct(categoryId: categoryId).listen(
+      (response) {
+        if (!isClosed) {
+          emit(
+            state.copyWith(
+              formsStatus: FormsStatus.success,
+              products: response,
+            ),
+          );
+        }
+      },
+      onError: (error) {
+        setStateToError(error.toString());
+      },
+    );
   }
 
   void setStateToError(String errorText) {

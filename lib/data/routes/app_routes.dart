@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shop/data/models/product_model.dart';
-import 'package:shop/ui/pages/auth/screens/registration_screen.dart';
 import 'package:shop/ui/pages/category/screen/category_add_screen.dart';
 import 'package:shop/ui/pages/product/screen/product_add_screen.dart';
 import 'package:shop/ui/pages/home/screen/home_screen.dart';
@@ -10,7 +9,6 @@ import 'package:shop/ui/pages/splash/splash_screen.dart';
 
 class AppRoutesNames {
   static const String home = '/home';
-  static const String regist = '/regist';
   static const String splash = '/splash';
   static const String categoryAdd = '/categoryAdd';
   static const String productAdd = '/productAdd';
@@ -41,9 +39,6 @@ class AppRoutes {
             builder: (context) => const CategoryAddScreen());
       case AppRoutesNames.splash:
         return MaterialPageRoute(builder: (context) => const SplashScreen());
-      case AppRoutesNames.regist:
-        return MaterialPageRoute(
-            builder: (context) => const RegistrationScreen());
       case AppRoutesNames.home:
         return MaterialPageRoute(builder: (context) => const HomeScreen());
       default:

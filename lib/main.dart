@@ -2,13 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shop/cubit/auth/auth_cubit.dart';
 import 'package:shop/cubit/category/category_cubit.dart';
 import 'package:shop/cubit/home/home_cubit.dart';
 import 'package:shop/cubit/product/product_cubit.dart';
 import 'package:shop/cubit/user/user_cubit.dart';
 import 'package:shop/data/local/storage_repository.dart';
-import 'package:shop/data/repositories/auth_repository.dart';
 import 'package:shop/data/repositories/category_repository.dart';
 import 'package:shop/data/repositories/home_repository.dart';
 import 'package:shop/data/repositories/product_repository.dart';
@@ -38,7 +36,6 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return MultiRepositoryProvider(
             providers: [
-              RepositoryProvider(create: (_) => AuthRepository()),
               RepositoryProvider(create: (_) => UserRepository()),
               RepositoryProvider(create: (_) => HomeRepository()),
               RepositoryProvider(create: (_) => CategoryRepository()),
@@ -46,11 +43,6 @@ class MyApp extends StatelessWidget {
             ],
             child: MultiBlocProvider(
               providers: [
-                BlocProvider(
-                  create: (context) => AuthCubit(
-                    context.read<AuthRepository>(),
-                  ),
-                ),
                 BlocProvider(
                   create: (context) => UserCubit(
                     context.read<UserRepository>(),

@@ -14,9 +14,8 @@ class HomeRepository {
     NetworkResponse networkResponse = NetworkResponse();
 
     try {
-      var result = await _firebaseFirestore
-          .collection(FixedNames.categories)
-          .get();
+      var result =
+          await _firebaseFirestore.collection(FixedNames.categories).get();
 
       networkResponse.data = result.docs
           .map((value) => CategoryModel.fromJson(value.data()))
@@ -34,15 +33,14 @@ class HomeRepository {
     return networkResponse;
   }
 
-  Future<NetworkResponse> getProducts() async {
-    String adminId = StorageRepository.getString(key: FixedNames.adminId);
-
+  Future<NetworkResponse> getProductsForCategoryId(
+      {required String categoryId}) async {
     NetworkResponse networkResponse = NetworkResponse();
 
     try {
       var result = await _firebaseFirestore
           .collection(FixedNames.products)
-          .where(FixedNames.adminId, isEqualTo: adminId)
+          .where(FixedNames.categoryId, isEqualTo: categoryId)
           .get();
 
       networkResponse.data = result.docs
@@ -60,32 +58,25 @@ class HomeRepository {
 
     return networkResponse;
   }
+  
 
-  Future<NetworkResponse> getProductsForCategoryId(
-      {required String categoryId}) async {
-    String adminId = StorageRepository.getString(key: FixedNames.adminId);
-    NetworkResponse networkResponse = NetworkResponse();
-
+  Stream<List<ProductModel>> getProduct({String categoryId = ""}) {
     try {
-      var result = await _firebaseFirestore
-          .collection(FixedNames.products)
-          .where(FixedNames.categoryId, isEqualTo: categoryId)
-          .where(FixedNames.adminId, isEqualTo: adminId)
-          .get();
-
-      networkResponse.data = result.docs
-          .map((value) => ProductModel.fromJson(value.data()))
-          .toList();
+      return _firebaseFirestore.collection("product").snapshots().map(
+            (snapshot) => snapshot.docs
+                .map((doc) => ProductModel.fromJson(doc.data()))
+                .where((product) =>
+                    product.categoryId == categoryId || categoryId.isEmpty)
+                .toList(),
+          );
     } on FirebaseException catch (e) {
       log(e.friendlyMessage);
 
-      networkResponse.errorText = e.friendlyMessage;
+      return Stream.error("Firebase xatoligi: ${e.friendlyMessage}");
     } catch (e) {
-      log("Nomalum xatolik catch $e");
+      log("Noma'lum xatolik: catch (e) ");
 
-      networkResponse.errorText = "Nomalum xatolik catch $e";
+      return Stream.error("Noma'lum xatolik: $e");
     }
-
-    return networkResponse;
   }
 }

@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       if (adminId.isEmpty) {
         NavigationService.instance.navigateMyScreenReplacement(
-          routeName: AppRoutesNames.regist,
+          routeName: AppRoutesNames.home,
         );
       } else {
         NavigationService.instance.navigateMyScreenReplacement(
