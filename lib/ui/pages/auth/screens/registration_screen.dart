@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shop/cubit/auth/auth_cubit.dart';
@@ -95,8 +94,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             email: _controllerEmail.text,
                             password: _controllerPassword.text,
                           );
-                      debugPrint(
-                          "Create account on Pressed:*******************************");
                     },
                     child: context.watch<AuthCubit>().state.formsStatus ==
                             FormsStatus.loading
